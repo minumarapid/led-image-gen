@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  build-cli:
+    cmds:
+      - go build -o dist/cli/main ./cmd/cli
+
+  build-server:
+    cmds:
+      - go build -o dist/server/main ./cmd/server
+
+  build-wasm:
+    cmds:
+      - go build -o dist/wasm/main.wasm ./cmd/wasm
+
+  build-all:
+    deps: [build-cli, build-server, build-wasm]
