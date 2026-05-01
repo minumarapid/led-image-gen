@@ -62,7 +62,7 @@ func defaultConfig() processor.Config {
 		LEDGamma:      1.0,
 		LEDExposure:   1.0,
 		LEDShape:      true,
-		MaxWorkers:    4,
+		MaxWorkers:    1,
 		EnableGlow:    true,
 		GlowStrength:  1.0,
 		GlowGamma:     1.0,
