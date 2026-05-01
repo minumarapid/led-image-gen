@@ -208,7 +208,7 @@ func GenerateLEDImage(srcImage image.Image, config *Config) (image.Image, error)
 	}
 	baseImage := ForceRGBA(baseLayer.Image())
 	if config.EnableGlow {
-		blurSigma := config.GlowStrength + float64(config.LEDSize)
+		blurSigma := config.GlowRange + float64(config.LEDSize)
 		if blurSigma < 0.1 {
 			blurSigma = 0.1
 		}

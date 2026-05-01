@@ -110,6 +110,9 @@ func applyConfigFromForm(cfg *processor.Config, r *http.Request) {
 	if v, ok := getFormValue(r, "EnableGlow"); ok {
 		cfg.EnableGlow = parseBool(v, cfg.EnableGlow)
 	}
+	if v, ok := getFormValue(r, "GlowRange"); ok {
+		cfg.GlowRange = parseFloat(v, cfg.GlowRange)
+	}
 	if v, ok := getFormValue(r, "GlowStrength"); ok {
 		cfg.GlowStrength = parseFloat(v, cfg.GlowStrength)
 	}
