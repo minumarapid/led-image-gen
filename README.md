@@ -41,3 +41,6 @@ http://localhost:8080/
 
 ### Endpoints
 - `POST /api/` - Image generation endpoint (accepts image file and settings via form-data)
+
+## License
+MIT License - see the [LICENSE](LICENSE) file for details.
