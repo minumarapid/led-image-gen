@@ -80,20 +80,9 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 }
 
 func defaultConfig() processor.Config {
-	return processor.Config{
-		Border:        10,
-		LEDSize:       4,
-		LEDGap:        2,
-		LEDGamma:      1.0,
-		LEDExposure:   1.0,
-		LEDShape:      false,
-		MaxWorkers:    1,
-		EnableGlow:    true,
-		GlowStrength:  1.0,
-		GlowGamma:     1.0,
-		GlowExposure:  1.0,
-		OffLightColor: color.RGBA{40, 40, 40, 255}, // 透明黒
-	}
+	config := processor.DefaultConfig()
+	config.MaxWorkers = 1
+	return *config
 }
 
 func applyConfigFromForm(cfg *processor.Config, r *http.Request) {

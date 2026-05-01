@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"image"
-	"image/color"
 	"image/png"
 	_ "image/png"
 	"log"
@@ -33,20 +32,8 @@ func main() {
 		log.Fatalf("Failed to decode input file: %v", err)
 	}
 
-	config := &processor.Config{
-		Border:        10,
-		LEDSize:       4,
-		LEDGap:        2,
-		LEDGamma:      1.0,
-		LEDExposure:   1.0,
-		LEDShape:      false,
-		MaxWorkers:    4,
-		EnableGlow:    true,
-		GlowStrength:  1.0,
-		GlowGamma:     1.0,
-		GlowExposure:  1.0,
-		OffLightColor: color.RGBA{40, 40, 40, 255}, // 透明黒
-	}
+	config := processor.DefaultConfig()
+	config.MaxWorkers = 1
 
 	resultImg, err := processor.GenerateLEDImage(img, config)
 	if err != nil {

@@ -21,10 +21,29 @@ type Config struct {
 	LEDShape      bool // true: circle, false: square
 	MaxWorkers    int
 	EnableGlow    bool
+	GlowRange     float64
 	GlowStrength  float64
 	GlowGamma     float64
 	GlowExposure  float64
 	OffLightColor color.RGBA
+}
+
+func DefaultConfig() *Config {
+	return &Config{
+		Border:        10,
+		LEDSize:       4,
+		LEDGap:        2,
+		LEDGamma:      1.0,
+		LEDExposure:   1.0,
+		LEDShape:      false,
+		MaxWorkers:    4,
+		EnableGlow:    true,
+		GlowRange:     1.0,
+		GlowStrength:  1.75,
+		GlowGamma:     1.0,
+		GlowExposure:  1.0,
+		OffLightColor: color.RGBA{40, 40, 40, 255}, // 透明黒
+	}
 }
 
 func GenerateLEDImage(srcImage image.Image, config *Config) (image.Image, error) {
