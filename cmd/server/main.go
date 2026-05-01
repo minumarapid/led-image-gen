@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"image/png"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
@@ -48,7 +49,13 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing image", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
+	defer func(file multipart.File) {
+		err := file.Close()
+		if err != nil {
+			http.Error(w, "failed to process image", http.StatusInternalServerError)
+			return
+		}
+	}(file)
 
 	src, _, err := image.Decode(file)
 	if err != nil {
