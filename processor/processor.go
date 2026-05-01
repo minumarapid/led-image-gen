@@ -213,7 +213,7 @@ func GenerateLEDImage(srcImage image.Image, config *Config) (image.Image, error)
 			blurSigma = 0.1
 		}
 		blurredGlow := imaging.Blur(glowLayer.Image(), blurSigma)
-		compositeAdditiveRGBA(baseImage, ForceRGBA(blurredGlow))
+		compositeAdditiveRGBA(baseImage, ForceRGBA(blurredGlow), config)
 	}
 	return baseImage, nil
 }
@@ -260,8 +260,8 @@ func (g *GammaLUT) Apply(c color.Color) color.RGBA64 {
 	}
 }
 
-func compositeAdditiveRGBA(dst *image.RGBA, src *image.RGBA) {
-	const glowAdditiveFactor = 1.5
+func compositeAdditiveRGBA(dst *image.RGBA, src *image.RGBA, config *Config) {
+	glowAdditiveFactor := config.GlowStrength
 	bounds := dst.Bounds()
 	w, h := bounds.Dx(), bounds.Dy()
 	for y := 0; y < h; y++ {
