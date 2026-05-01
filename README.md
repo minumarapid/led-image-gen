@@ -1,4 +1,8 @@
 # led-image-gen
+
+![Go](https://img.shields.io/github/go-mod/go-version/minumarapid/led-image-gen)
+[![License](https://img.shields.io/github/license/minumarapid/led-image-gen)](LICENSE)
+
 A Golang image processing tool that generates LED-style images with glow effects.  
 Currently available as WebAPI and CLI.
 
