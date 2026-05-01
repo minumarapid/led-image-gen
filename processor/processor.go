@@ -35,7 +35,7 @@ func DefaultConfig() *Config {
 		LEDGap:        2,
 		LEDGamma:      1.0,
 		LEDExposure:   1.0,
-		LEDShape:      false,
+		LEDShape:      true,
 		MaxWorkers:    4,
 		EnableGlow:    true,
 		GlowRange:     1.0,
