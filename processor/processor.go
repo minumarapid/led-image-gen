@@ -12,19 +12,26 @@ import (
 	"github.com/fogleman/gg"
 )
 
+type LEDShape string
+
+const (
+	LEDShapeCircle LEDShape = "circle"
+	LEDShapeSquare LEDShape = "square"
+)
+
 type Config struct {
-	Border        int
-	LEDSize       int
-	LEDGap        int
-	LEDGamma      float64
-	LEDExposure   float64
-	LEDShape      bool // true: circle, false: square
-	MaxWorkers    int
-	EnableGlow    bool
-	GlowRange     float64
-	GlowStrength  float64
-	GlowGamma     float64
-	GlowExposure  float64
+	Border        int      `mapstructure:"border"`
+	LEDSize       int      `mapstructure:"led-size"`
+	LEDGap        int      `mapstructure:"led-gap"`
+	LEDGamma      float64  `mapstructure:"led-gamma"`
+	LEDExposure   float64  `mapstructure:"led-exposure"`
+	LEDShape      LEDShape `mapstructure:"led-shape"`
+	MaxWorkers    int      `mapstructure:"max-workers"`
+	EnableGlow    bool     `mapstructure:"enable-glow"`
+	GlowRange     float64  `mapstructure:"glow-range"`
+	GlowStrength  float64  `mapstructure:"glow-strength"`
+	GlowGamma     float64  `mapstructure:"glow-gamma"`
+	GlowExposure  float64  `mapstructure:"glow-exposure"`
 	OffLightColor color.RGBA
 }
 
@@ -35,10 +42,10 @@ func DefaultConfig() *Config {
 		LEDGap:        2,
 		LEDGamma:      1.0,
 		LEDExposure:   1.0,
-		LEDShape:      true,
+		LEDShape:      LEDShapeCircle,
 		MaxWorkers:    4,
 		EnableGlow:    true,
-		GlowRange:     1.0,
+		GlowRange:     3,
 		GlowStrength:  1.75,
 		GlowGamma:     1.0,
 		GlowExposure:  1.0,
@@ -46,15 +53,14 @@ func DefaultConfig() *Config {
 	}
 }
 
-// LEDShapeCache: LED形状をプリレンダリングしてキャッシュ
 type LEDShapeCache struct {
 	mu     sync.RWMutex
 	shapes map[ledShapeKey]*image.RGBA
 }
 
 type ledShapeKey struct {
-	size   int
-	circle bool
+	size  int
+	shape LEDShape
 }
 
 func NewLEDShapeCache() *LEDShapeCache {
@@ -63,37 +69,38 @@ func NewLEDShapeCache() *LEDShapeCache {
 	}
 }
 
-func (lsc *LEDShapeCache) GetShape(ledSize int, isCircle bool) *image.RGBA {
-	cacheKey := ledShapeKey{size: ledSize, circle: isCircle}
+func (lsc *LEDShapeCache) GetShape(ledSize int, shape LEDShape) *image.RGBA {
+	cacheKey := ledShapeKey{size: ledSize, shape: shape}
 
 	lsc.mu.RLock()
-	if shape, ok := lsc.shapes[cacheKey]; ok {
+	if shapeImage, ok := lsc.shapes[cacheKey]; ok {
 		lsc.mu.RUnlock()
-		return shape
+		return shapeImage
 	}
 	lsc.mu.RUnlock()
 
-	shape := createLEDTemplate(ledSize, isCircle)
+	shapeImage := createLEDTemplate(ledSize, shape)
 	lsc.mu.Lock()
-	lsc.shapes[cacheKey] = shape
+	lsc.shapes[cacheKey] = shapeImage
 	lsc.mu.Unlock()
 
-	return shape
+	return shapeImage
 }
 
-func createLEDTemplate(ledSize int, isCircle bool) *image.RGBA {
+func createLEDTemplate(ledSize int, shape LEDShape) *image.RGBA {
 	canvas := gg.NewContext(ledSize, ledSize)
 	canvas.SetRGBA(0, 0, 0, 0)
 	canvas.Clear()
 
-	if isCircle {
+	switch shape {
+	case LEDShapeSquare:
+		canvas.SetColor(color.RGBA{R: 255, G: 255, B: 255, A: 255})
+		canvas.DrawRectangle(0, 0, float64(ledSize), float64(ledSize))
+		canvas.Fill()
+	default:
 		radius := float64(ledSize) / 2.0
 		canvas.SetColor(color.RGBA{R: 255, G: 255, B: 255, A: 255})
 		canvas.DrawCircle(radius, radius, radius)
-		canvas.Fill()
-	} else {
-		canvas.SetColor(color.RGBA{R: 255, G: 255, B: 255, A: 255})
-		canvas.DrawRectangle(0, 0, float64(ledSize), float64(ledSize))
 		canvas.Fill()
 	}
 
@@ -257,7 +264,7 @@ func GenerateLEDImage(srcImage image.Image, config *Config) (image.Image, error)
 	baseImage := baseLayer
 	if config.EnableGlow {
 		//blurSigma := config.GlowRange + float64(config.LEDSize)
-		blurSigma := config.GlowRange + float64(config.LEDSize)
+		blurSigma := config.GlowRange
 		if blurSigma < 0.1 {
 			blurSigma = 0.1
 		}
@@ -325,7 +332,6 @@ func drawColoredLED(dst *image.RGBA, template *image.RGBA, x, y int, col color.R
 						dPix[pixOff+2] = col.B
 						dPix[pixOff+3] = col.A
 					} else {
-						// ★ここを修正：RGBもマスクのアルファ値(alpha)の割合で乗算する
 						dPix[pixOff+0] = uint8(int(col.R) * int(alpha) / 255)
 						dPix[pixOff+1] = uint8(int(col.G) * int(alpha) / 255)
 						dPix[pixOff+2] = uint8(int(col.B) * int(alpha) / 255)
