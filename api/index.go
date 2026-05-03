@@ -84,7 +84,7 @@ func applyConfigFromForm(cfg *processor.Config, r *http.Request) {
 		cfg.LEDExposure = parseFloat(v, cfg.LEDExposure)
 	}
 	if v, ok := getFormValue(r, "LEDShape"); ok {
-		cfg.LEDShape = parseBool(v, cfg.LEDShape)
+		cfg.LEDShape = parseLEDShape(v, cfg.LEDShape)
 	}
 	if v, ok := getFormValue(r, "EnableGlow"); ok {
 		cfg.EnableGlow = parseBool(v, cfg.EnableGlow)
@@ -136,6 +136,22 @@ func parseBool(value string, fallback bool) bool {
 		return fallback
 	}
 	return v
+}
+
+func parseLEDShape(value string, fallback processor.LEDShape) processor.LEDShape {
+	v := strings.ToLower(strings.TrimSpace(value))
+	switch v {
+	case "circle":
+		return processor.LEDShapeCircle
+	case "square":
+		return processor.LEDShapeSquare
+	case "true":
+		return processor.LEDShapeCircle
+	case "false":
+		return processor.LEDShapeSquare
+	default:
+		return fallback
+	}
 }
 
 func parseRGBA(value string, fallback color.RGBA) color.RGBA {

@@ -1,6 +1,6 @@
 # led-image-gen
 
-![Go](https://img.shields.io/github/go-mod/go-version/minumarapid/led-image-gen)
+[![Go](https://img.shields.io/github/go-mod/go-version/minumarapid/led-image-gen)]()
 [![License](https://img.shields.io/github/license/minumarapid/led-image-gen)](LICENSE)
 
 A Golang image processing tool that generates LED-style images with glow effects.  
@@ -22,7 +22,7 @@ Currently available as WebAPI and CLI.
 | `LEDGap`        | Gap between LEDs                                  | int        | No        | 2                           |
 | `LEDGamma`      | Gamma correction value for LED                    | float64    | No        | 1.0                         |
 | `LEDExposure`   | Exposure correction value for LED                 | float64    | No        | 1.0                         |
-| `LEDShape`      | Shape of LED (true: circle, false: square)        | bool       | No        | false                       |
+| `LEDShape`      | Shape of LED (`circle` or `square`)              | string     | No        | circle                      |
 | `MaxWorkers`    | Maximum number of workers for parallel processing | int        | No        | 4                           |
 | `EnableGlow`    | Enable glow effect                                | bool       | No        | true                        |
 | `GlowRange`     | Range of glow effect                              | float64    | No        | 1.0                         |

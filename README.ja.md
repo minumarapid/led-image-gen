@@ -22,7 +22,7 @@
 | `LEDGap`        | LED同士の間隔                    | int        | いいえ | 2                           |
 | `LEDGamma`      | LEDのガンマ補正値                  | float64    | いいえ | 1.0                         |
 | `LEDExposure`   | LEDの露出補正値                   | float64    | いいえ | 1.0                         |
-| `LEDShape`      | LEDの形状（true: 円形、false: 四角形） | bool       | いいえ | false                       |
+| `LEDShape`      | LEDの形状（`circle` または `square`） | string     | いいえ | circle                      |
 | `MaxWorkers`    | 並列処理に使用する最大ワーカー数            | int        | いいえ | 4                           |
 | `EnableGlow`    | 発光エフェクトの有効化                 | bool       | いいえ | true                        |
 | `GlowRange`     | 発光エフェクトの範囲                  | float64    | いいえ | 1.0                         |
