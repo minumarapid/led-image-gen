@@ -22,9 +22,9 @@ This package exposes a single global function for browsers:
   "glowGamma": 1.0,
   "glowExposure": 1.0,
   "offLightColor": {
-    "R": 40,
-    "G": 40,
-    "B": 40,
+    "R": 50,
+    "G": 50,
+    "B": 50,
     "A": 255
   }
 }

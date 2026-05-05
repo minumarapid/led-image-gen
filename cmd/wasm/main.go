@@ -23,7 +23,8 @@ func main() {
 
 func generateLEDImage(this js.Value, args []js.Value) any {
 	if len(args) < 2 {
-		return "Error: insufficient arguments"
+		errObj := js.Global().Get("Error").New("insufficient arguments")
+		return errObj
 	}
 
 	var configJsonStr string
@@ -34,11 +35,11 @@ func generateLEDImage(this js.Value, args []js.Value) any {
 	}
 
 	cfg := processor.DefaultConfig()
-	cfg.MaxWorkers = 1
 	if err := json.Unmarshal([]byte(configJsonStr), cfg); err != nil {
 		errObj := js.Global().Get("Error").New(fmt.Sprintf("Invalid config: %v", err))
 		return errObj
 	}
+	cfg.MaxWorkers = 1
 
 	jsFileData := args[0]
 	uint8Arr := js.Global().Get("Uint8Array").New(jsFileData)
