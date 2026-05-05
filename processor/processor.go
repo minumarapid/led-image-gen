@@ -20,19 +20,19 @@ const (
 )
 
 type Config struct {
-	Border        int      `mapstructure:"border"        json:"border"`
-	LEDSize       int      `mapstructure:"led-size"      json:"ledSize"`
-	LEDGap        int      `mapstructure:"led-gap"       json:"ledGap"`
-	LEDGamma      float64  `mapstructure:"led-gamma"     json:"ledGamma"`
-	LEDExposure   float64  `mapstructure:"led-exposure"  json:"ledExposure"`
-	LEDShape      LEDShape `mapstructure:"led-shape"     json:"ledShape"`
-	MaxWorkers    int      `mapstructure:"max-workers"   json:"maxWorkers"`
-	EnableGlow    bool     `mapstructure:"enable-glow"   json:"enableGlow"`
-	GlowRange     float64  `mapstructure:"glow-range"    json:"glowRange"`
-	GlowStrength  float64  `mapstructure:"glow-strength" json:"glowStrength"`
-	GlowGamma     float64  `mapstructure:"glow-gamma"    json:"glowGamma"`
-	GlowExposure  float64  `mapstructure:"glow-exposure" json:"glowExposure"`
-	OffLightColor color.RGBA
+	Border        int        `mapstructure:"border"        json:"border"`
+	LEDSize       int        `mapstructure:"led-size"      json:"ledSize"`
+	LEDGap        int        `mapstructure:"led-gap"       json:"ledGap"`
+	LEDGamma      float64    `mapstructure:"led-gamma"     json:"ledGamma"`
+	LEDExposure   float64    `mapstructure:"led-exposure"  json:"ledExposure"`
+	LEDShape      LEDShape   `mapstructure:"led-shape"     json:"ledShape"`
+	MaxWorkers    int        `mapstructure:"max-workers"   json:"maxWorkers"`
+	EnableGlow    bool       `mapstructure:"enable-glow"   json:"enableGlow"`
+	GlowRange     float64    `mapstructure:"glow-range"    json:"glowRange"`
+	GlowStrength  float64    `mapstructure:"glow-strength" json:"glowStrength"`
+	GlowGamma     float64    `mapstructure:"glow-gamma"    json:"glowGamma"`
+	GlowExposure  float64    `mapstructure:"glow-exposure" json:"glowExposure"`
+	OffLightColor color.RGBA `json:"offLightColor"`
 }
 
 func DefaultConfig() *Config {
