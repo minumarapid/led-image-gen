@@ -7,6 +7,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"image"
+	_ "image/jpeg"
 	"image/png"
 	"syscall/js"
 
@@ -43,6 +45,7 @@ func generateLEDImage(this js.Value, args []js.Value) any {
 	goFileData := make([]byte, uint8Arr.Get("length").Int())
 	js.CopyBytesToGo(goFileData, uint8Arr)
 
+	src, _, err := image.Decode(bytes.NewReader(goFileData))
 	if err != nil {
 		errObj := js.Global().Get("Error").New(fmt.Sprintf("Failed to decode image: %v", err))
 		return errObj
