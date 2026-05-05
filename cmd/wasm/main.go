@@ -6,7 +6,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"image"
+	"fmt"
 	"image/png"
 	"syscall/js"
 
@@ -24,31 +24,40 @@ func generateLEDImage(this js.Value, args []js.Value) any {
 		return "Error: insufficient arguments"
 	}
 
-	configJsonStr := args[1].String()
+	var configJsonStr string
+	if args[1].Type() == js.TypeObject {
+		configJsonStr = js.Global().Get("JSON").Call("stringify", args[1]).String()
+	} else {
+		configJsonStr = args[1].String()
+	}
 
 	cfg := processor.DefaultConfig()
 	cfg.MaxWorkers = 1
 	if err := json.Unmarshal([]byte(configJsonStr), cfg); err != nil {
-		return "Error: invalid config JSON"
+		errObj := js.Global().Get("Error").New(fmt.Sprintf("Invalid config: %v", err))
+		return errObj
 	}
 
 	jsFileData := args[0]
-	goFileData := make([]byte, jsFileData.Get("length").Int())
-	js.CopyBytesToGo(goFileData, jsFileData)
-	src, _, err := image.Decode(bytes.NewReader(goFileData))
+	uint8Arr := js.Global().Get("Uint8Array").New(jsFileData)
+	goFileData := make([]byte, uint8Arr.Get("length").Int())
+	js.CopyBytesToGo(goFileData, uint8Arr)
 
 	if err != nil {
-		return "Error: invalid image"
+		errObj := js.Global().Get("Error").New(fmt.Sprintf("Failed to decode image: %v", err))
+		return errObj
 	}
 
 	result, err := processor.GenerateLEDImage(src, cfg)
 	if err != nil {
-		return "Error: failed to process image"
+		errObj := js.Global().Get("Error").New(fmt.Sprintf("Failed to process image: %v", err))
+		return errObj
 	}
 
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, result); err != nil {
-		return "Error: failed to encode image"
+		errObj := js.Global().Get("Error").New(fmt.Sprintf("Failed to encode image: %v", err))
+		return errObj
 	}
 	jsArray := js.Global().Get("Uint8Array").New(buf.Len())
 	js.CopyBytesToJS(jsArray, buf.Bytes())
