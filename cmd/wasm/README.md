@@ -33,11 +33,8 @@ This package exposes a single global function for browsers:
 ## Build notes
 
 ```bash
-# Copy wasm_exec.js once (Go provides it)
-cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" web/public/
-
 # Build wasm
-GOOS=js GOARCH=wasm go build -o web/public/led-image-gen.wasm ./cmd/wasm
+GOOS=js GOARCH=wasm go build -o dist/wasm/main.wasm ./cmd/wasm
 ```
 
 ## JS usage sketch
@@ -48,7 +45,7 @@ const go = new Go();
 const resp = await fetch("/led-image-gen.wasm");
 const bytes = await resp.arrayBuffer();
 const { instance } = await WebAssembly.instantiate(bytes, go.importObject);
-await go.run(instance);
+go.run(instance);
 
 // Call the Go function
 const pngBytes = generateLEDImage(imageBytes, { ledSize: 6, ledShape: "square" });

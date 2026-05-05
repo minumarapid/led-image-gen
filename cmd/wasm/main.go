@@ -42,7 +42,11 @@ func generateLEDImage(this js.Value, args []js.Value) any {
 	cfg.MaxWorkers = 1
 
 	jsFileData := args[0]
-	uint8Arr := js.Global().Get("Uint8Array").New(jsFileData)
+	uint8ArrayCtor := js.Global().Get("Uint8Array")
+	uint8Arr := jsFileData
+	if !jsFileData.InstanceOf(uint8ArrayCtor) {
+		uint8Arr = uint8ArrayCtor.New(jsFileData)
+	}
 	goFileData := make([]byte, uint8Arr.Get("length").Int())
 	js.CopyBytesToGo(goFileData, uint8Arr)
 
