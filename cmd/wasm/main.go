@@ -8,11 +8,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"image"
+	_ "image/gif"
 	_ "image/jpeg"
 	"image/png"
 	"syscall/js"
 
 	"led-image-gen/processor"
+
+	_ "golang.org/x/image/webp"
 )
 
 func main() {
