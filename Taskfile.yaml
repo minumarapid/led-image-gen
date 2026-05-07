@@ -11,7 +11,20 @@ tasks:
 
   build-wasm:
     cmds:
-      - go build -o dist/wasm/main.wasm ./cmd/wasm
+      - GOOS=js GOARCH=wasm go build -o web/public/led-gen.wasm ./cmd/wasm
+
+  build-web:
+    deps: [build-wasm]
+    cmds:
+      - cd web && pnpm run build
 
   build-all:
     deps: [build-cli, build-server, build-wasm]
+
+  dev-web:
+    cmds:
+      - cd web && pnpm run dev
+
+  default:
+    cmds:
+      - go tool task --list-all

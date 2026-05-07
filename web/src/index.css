@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "M PLUS 2", "Noto Sans JP", sans-serif;
+  --color-bg : var(--color-mist-50);
+}
