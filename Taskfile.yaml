@@ -11,6 +11,7 @@ tasks:
 
   build-wasm:
     cmds:
+      - cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" ./web/public/
       - GOOS=js GOARCH=wasm go build -o web/public/led-gen.wasm ./cmd/wasm
 
   build-web:
