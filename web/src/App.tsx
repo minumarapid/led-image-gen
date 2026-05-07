@@ -1,4 +1,4 @@
-import {createEffect, createSignal, onCleanup, onMount, Show} from 'solid-js'
+import {createEffect, createSignal, onCleanup, onMount, Show, untrack} from 'solid-js'
 import { cancelLEDImage, defaultConfig, generateLEDImage, initWasmWorker} from "./lib/wasm-bridge.ts";
 import {AppSymbol} from "./components/loading.tsx";
 import {Dropzone, file, setFile} from "./components/dropzone.tsx";
@@ -35,14 +35,15 @@ function App() {
     const ready = wasmReady();
     if (!selectedFile || !ready) return;
 
-    const previousUrl = outputUrl();
+    const previousUrl = untrack(() => outputUrl());
+    if (previousUrl) URL.revokeObjectURL(previousUrl);
+    setOutputUrl(null);
     setIsProcessing(true);
     setError(null);
 
     selectedFile.arrayBuffer()
       .then((buffer) => generateLEDImage(new Uint8Array(buffer), defaultConfig))
       .then((pngBytes) => {
-        if (previousUrl) URL.revokeObjectURL(previousUrl);
         const pngCopy = new Uint8Array(pngBytes.byteLength);
         pngCopy.set(pngBytes);
         const blob = new Blob([pngCopy.buffer], { type: "image/png" });
