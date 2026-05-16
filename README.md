@@ -1,3 +1,7 @@
+> [!WARNING]  
+> **This repository is deprecated.** > This project has been completely rewritten in **Rust** for better performance and WebAssembly support!
+> Please visit the new repository: [minumarapid/led-gen](https://github.com/minumarapid/led-gen)
+
 # led-image-gen
 
 [![Go](https://img.shields.io/github/go-mod/go-version/minumarapid/led-image-gen)]()
