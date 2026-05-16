@@ -1,3 +1,8 @@
+> [!WARNING]  
+> **このリポジトリは、public archiveとなり、今後の開発は行われません。**  
+> このプロジェクトは、よりよいWebAssemblyのサポートや、パフォーマンス向上を目的として、Rustで再構成されています。  
+> 今後の開発は [minumarapid/led-gen](https://github.com/minumarapid/led-gen) で行われます。
+
 # led-image-gen
 
 ![Go](https://img.shields.io/github/go-mod/go-version/minumarapid/led-image-gen)
